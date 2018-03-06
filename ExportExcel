@@ -1,0 +1,23 @@
+/**
+	 * 导出公共接口
+	 * @param entity
+	 * @param list
+	 * @param title 文件名
+	 * @param type 0：无需分组，其他需分组
+	 * @param group 分组
+	 * @param response
+	 * @return
+	 */
+	public String reportOrder(T entity, List<T> list, String title, String type, int group, HttpServletResponse response){
+		try{
+			String file = title + DateUtils.getDate("yyyyMMddHHmmss") + ".xlsx";
+			if (type.equals("0")) {
+				new ExportExcel(title, entity.getClass()).setDataList(list).write(response, file).dispose();
+			} else {
+				new ExportExcel(title, entity.getClass(), 1, group).setDataList(list).write(response, file).dispose();
+			}
+			return title + "导出成功！";
+		}catch (Exception e){
+			return title + "导出失败！" + e.getMessage();
+		}
+	}
